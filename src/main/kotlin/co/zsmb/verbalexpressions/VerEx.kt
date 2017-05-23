@@ -1,24 +1,26 @@
 package co.zsmb.verbalexpressions
 
+import java.util.regex.Pattern
+
 class VerEx {
 
     companion object {
 
         private val symbols = mapOf(
-                'd' to java.util.regex.Pattern.UNIX_LINES,
-                'i' to java.util.regex.Pattern.CASE_INSENSITIVE,
-                'x' to java.util.regex.Pattern.COMMENTS,
-                'm' to java.util.regex.Pattern.MULTILINE,
-                's' to java.util.regex.Pattern.DOTALL,
-                'u' to java.util.regex.Pattern.UNICODE_CASE,
-                'U' to java.util.regex.Pattern.UNICODE_CHARACTER_CLASS
+                'd' to Pattern.UNIX_LINES,
+                'i' to Pattern.CASE_INSENSITIVE,
+                'x' to Pattern.COMMENTS,
+                'm' to Pattern.MULTILINE,
+                's' to Pattern.DOTALL,
+                'u' to Pattern.UNICODE_CASE,
+                'U' to Pattern.UNICODE_CHARACTER_CLASS
         )
 
     }
 
-    private val pattern: java.util.regex.Pattern
+    private val pattern: Pattern
         get() {
-            val compile = java.util.regex.Pattern.compile("$prefixes$source$suffixes", modifiers)
+            val compile = Pattern.compile("$prefixes$source$suffixes", modifiers)
             println(compile)
             return compile
         }
@@ -26,7 +28,7 @@ class VerEx {
     private var prefixes = StringBuilder()
     private var source = StringBuilder()
     private var suffixes = StringBuilder()
-    private var modifiers = java.util.regex.Pattern.MULTILINE
+    private var modifiers = Pattern.MULTILINE
 
     //// TESTS ////
 
@@ -34,17 +36,17 @@ class VerEx {
 
     //// COMPOSITION ////
 
-    fun add(str: String): co.zsmb.verbalexpressions.VerEx {
+    fun add(str: String): VerEx {
         source.append(str)
         return this
     }
 
-    fun startOfLine(enabled: Boolean = true): co.zsmb.verbalexpressions.VerEx {
+    fun startOfLine(enabled: Boolean = true): VerEx {
         prefixes = StringBuilder(if (enabled) "^" else "")
         return this
     }
 
-    fun endOfLine(enabled: Boolean = true): co.zsmb.verbalexpressions.VerEx {
+    fun endOfLine(enabled: Boolean = true): VerEx {
         suffixes = StringBuilder(if (enabled) "$" else "")
         return this
     }
@@ -79,7 +81,7 @@ class VerEx {
 
     fun searchOneLine(enabled: Boolean = true) = updateModifier('m', !enabled)
 
-    fun or(str: String): co.zsmb.verbalexpressions.VerEx {
+    fun or(str: String): VerEx {
         prefixes = StringBuilder().append("(").append(prefixes)
         source.append(")|(").append(str).append(")").append(suffixes)
         suffixes = StringBuilder()
@@ -87,12 +89,12 @@ class VerEx {
         return this
     }
 
-    fun multiple(str: String, min: Int? = null, max: Int? = null): co.zsmb.verbalexpressions.VerEx {
+    fun multiple(str: String, min: Int? = null, max: Int? = null): VerEx {
         then(str)
         return count(min, max)
     }
 
-    fun count(min: Int? = null, max: Int? = null): co.zsmb.verbalexpressions.VerEx {
+    fun count(min: Int? = null, max: Int? = null): VerEx {
         if(min != null && max != null && min > max) {
             throw IllegalArgumentException("Min count ($min) can't be less than max count ($max).")
         }
@@ -105,7 +107,7 @@ class VerEx {
         return pattern.matcher(source).replaceAll(replacement)
     }
 
-    fun range(vararg args: Pair<Any, Any>): co.zsmb.verbalexpressions.VerEx {
+    fun range(vararg args: Pair<Any, Any>): VerEx {
         return add(args.joinToString(prefix = "[", postfix = "]", separator = "") { "${it.first}-${it.second}" })
     }
 
@@ -129,15 +131,15 @@ class VerEx {
             if (enabled) addModifier(modifier)
             else removeModifier(modifier)
 
-    private fun addModifier(modifier: Char): co.zsmb.verbalexpressions.VerEx {
-        co.zsmb.verbalexpressions.VerEx.Companion.symbols[modifier]?.let {
+    private fun addModifier(modifier: Char): VerEx {
+        VerEx.Companion.symbols[modifier]?.let {
             modifiers = modifiers or it
         }
         return this
     }
 
-    private fun removeModifier(modifier: Char): co.zsmb.verbalexpressions.VerEx {
-        co.zsmb.verbalexpressions.VerEx.Companion.symbols[modifier]?.let {
+    private fun removeModifier(modifier: Char): VerEx {
+        VerEx.Companion.symbols[modifier]?.let {
             modifiers = modifiers and it.inv()
         }
         return this
