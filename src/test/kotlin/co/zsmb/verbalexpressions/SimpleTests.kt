@@ -487,4 +487,31 @@ class SimpleTests {
         assertTrue("abba" matches verex)
     }
 
+    @Test
+    fun addModifier() {
+        val verex = VerEx()
+                .then("apple")
+                .addModifier("i")
+                .removeModifier("i")
+                .addModifier("i")
+
+        assertTrue("apple" matches verex)
+        assertTrue("Apple" matches verex)
+        assertTrue("aPpLe" matches verex)
+    }
+
+    @Test
+    fun removeModifier() {
+        val verex = VerEx()
+                .then("apple")
+                .removeModifier('i')
+                .addModifier('i')
+                .removeModifier('i')
+
+        assertTrue("apple" matches verex)
+
+        assertFalse("Apple" matches verex)
+        assertFalse("aPpLe" matches verex)
+    }
+
 }

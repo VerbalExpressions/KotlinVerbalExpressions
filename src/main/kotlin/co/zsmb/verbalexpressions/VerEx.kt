@@ -94,13 +94,10 @@ class VerEx {
 
     fun atLeast(min: Int) = count(min)
 
-    fun replace(source: String, replacement: String): String {
-        return pattern.matcher(source).replaceAll(replacement)
-    }
+    fun replace(source: String, replacement: String): String = pattern.matcher(source).replaceAll(replacement)
 
-    fun range(vararg args: Pair<Any, Any>): VerEx {
-        return add(args.joinToString(prefix = "[", postfix = "]", separator = "") { "${it.first}-${it.second}" })
-    }
+    fun range(vararg args: Pair<Any, Any>) =
+            add(args.joinToString(prefix = "[", postfix = "]", separator = "") { "${it.first}-${it.second}" })
 
     fun beginCapture() = add("(")
 
@@ -112,33 +109,45 @@ class VerEx {
 
     fun zeroOrMore() = add("*")
 
-    //// HELPERS ////
-
-    private fun add(str: String): VerEx {
-        source.append(str)
-        return this
-    }
-
-    private fun sanitize(str: String): String {
-        return str.replace("[\\W]".toRegex(), "\\\\$0")
-    }
-
-    private fun updateModifier(modifier: Char, enabled: Boolean) =
-            if (enabled) addModifier(modifier)
-            else removeModifier(modifier)
-
-    private fun addModifier(modifier: Char): VerEx {
+    fun addModifier(modifier: Char): VerEx {
         VerEx.Companion.symbols[modifier]?.let {
             modifiers = modifiers or it
         }
         return this
     }
 
-    private fun removeModifier(modifier: Char): VerEx {
+    fun removeModifier(modifier: Char): VerEx {
         VerEx.Companion.symbols[modifier]?.let {
             modifiers = modifiers and it.inv()
         }
         return this
     }
+
+    fun addModifier(modifier: String): VerEx {
+        if(modifier.length != 1) {
+            throw IllegalArgumentException("Modifier has to be a single character")
+        }
+        return addModifier(modifier[0])
+    }
+
+    fun removeModifier(modifier: String): VerEx {
+        if(modifier.length != 1) {
+            throw IllegalArgumentException("Modifier has to be a single character")
+        }
+        return removeModifier(modifier[0])
+    }
+
+    //// PRIVATE HELPERS ////
+
+    private fun add(str: String): VerEx {
+        source.append(str)
+        return this
+    }
+
+    private fun sanitize(str: String) = str.replace("[\\W]".toRegex(), "\\\\$0")
+
+    private fun updateModifier(modifier: Char, enabled: Boolean) =
+            if (enabled) addModifier(modifier)
+            else removeModifier(modifier)
 
 }
