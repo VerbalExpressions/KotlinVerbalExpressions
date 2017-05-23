@@ -51,9 +51,9 @@ class VerEx {
         return this
     }
 
-    fun find(str: String) = add("(?:${sanitize(str)})")
+    fun find(str: String) = then(str)
 
-    fun then(str: String) = find(str)
+    fun then(str: String) = add("(?:${sanitize(str)})")
 
     fun maybe(str: String) = add("(?:${sanitize(str)})?")
 
@@ -87,6 +87,28 @@ class VerEx {
         suffixes = StringBuilder()
 
         return this
+    }
+
+    fun multiple(str: String, min: Int? = null, max: Int? = null): VerEx {
+        then(str)
+        return count(min, max)
+    }
+
+    fun count(min: Int? = null, max: Int? = null): VerEx {
+        if(min != null && max != null && min > max) {
+            throw IllegalArgumentException("Min count ($min) can't be less than max count ($max).")
+        }
+        return add("{${min ?: "1"},${max ?: ""}}")
+    }
+
+    fun atLeast(min: Int) = count(min)
+
+    fun replace(source: String, replacement: String): String {
+        return pattern.matcher(source).replaceAll(replacement)
+    }
+
+    fun range(vararg args: Pair<Any, Any>): VerEx {
+        return add(args.joinToString(prefix = "[", postfix = "]", separator = "") { "${it.first}-${it.second}" })
     }
 
     fun beginCapture() = add("(")
