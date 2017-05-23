@@ -28,7 +28,7 @@ class VerEx {
 
     //// TESTS ////
 
-    fun testExact(toTest: String?) = if(toTest == null) false else pattern.matcher(toTest).find()
+    fun testExact(toTest: String?) = if (toTest == null) false else pattern.matcher(toTest).find()
 
     //// COMPOSITION ////
 
@@ -73,7 +73,7 @@ class VerEx {
     fun searchOneLine(enabled: Boolean = true) = updateModifier('m', !enabled)
 
     fun or(str: String): VerEx {
-        prefixes = StringBuilder().append("(").append(prefixes)
+        prefixes.append("(")
         source.append(")|(").append(str).append(")").append(suffixes)
         suffixes = StringBuilder()
 
@@ -82,17 +82,22 @@ class VerEx {
 
     fun multiple(str: String, min: Int? = null, max: Int? = null): VerEx {
         then(str)
-        return count(min, max)
+        return times(min, max)
     }
 
-    fun count(min: Int? = null, max: Int? = null): VerEx {
-        if(min != null && max != null && min > max) {
+    fun times(min: Int? = null, max: Int? = null): VerEx {
+        if(min == null) {
+            throw IllegalArgumentException("Invalid call to times()")
+        }
+        if (max != null && min > max) {
             throw IllegalArgumentException("Min count ($min) can't be less than max count ($max).")
         }
-        return add("{${min ?: "1"},${max ?: ""}}")
+        return add("{$min,${max ?: ""}}")
     }
 
-    fun atLeast(min: Int) = count(min)
+    fun exactly(count: Int) = times(count, count)
+
+    fun atLeast(min: Int) = times(min)
 
     fun replace(source: String, replacement: String): String = pattern.matcher(source).replaceAll(replacement)
 
@@ -124,14 +129,14 @@ class VerEx {
     }
 
     fun addModifier(modifier: String): VerEx {
-        if(modifier.length != 1) {
+        if (modifier.length != 1) {
             throw IllegalArgumentException("Modifier has to be a single character")
         }
         return addModifier(modifier[0])
     }
 
     fun removeModifier(modifier: String): VerEx {
-        if(modifier.length != 1) {
+        if (modifier.length != 1) {
             throw IllegalArgumentException("Modifier has to be a single character")
         }
         return removeModifier(modifier[0])
