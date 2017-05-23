@@ -1,7 +1,6 @@
 package co.zsmb.verbalexpressions
 
 import org.junit.Test
-import java.rmi.server.ExportException
 import java.util.regex.PatternSyntaxException
 
 class ExceptionTests {
