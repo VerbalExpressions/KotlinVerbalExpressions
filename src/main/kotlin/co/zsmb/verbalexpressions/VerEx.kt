@@ -19,11 +19,7 @@ class VerEx {
     }
 
     private val pattern: Pattern
-        get() {
-            val compile = Pattern.compile("$prefixes$source$suffixes", modifiers)
-            println(compile)
-            return compile
-        }
+        get() = Pattern.compile("$prefixes$source$suffixes", modifiers)
 
     private var prefixes = StringBuilder()
     private var source = StringBuilder()
@@ -144,6 +140,5 @@ class VerEx {
         }
         return this
     }
-
 
 }

@@ -5,7 +5,7 @@ before_install:
   - chmod +x gradlew
 
 script:
-- ./gradlew clean build -x test
+- ./gradlew clean build
 
 notifications:
   email: false
