@@ -32,11 +32,6 @@ class VerEx {
 
     //// COMPOSITION ////
 
-    fun add(str: String): VerEx {
-        source.append(str)
-        return this
-    }
-
     fun startOfLine(enabled: Boolean = true): VerEx {
         prefixes = StringBuilder(if (enabled) "^" else "")
         return this
@@ -61,7 +56,7 @@ class VerEx {
 
     fun somethingBut(str: String) = add("(?:[^${sanitize(str)}]+)")
 
-    fun lineBreak() = add("""(?:(?:\n)|(?:\r\n)""")
+    fun lineBreak() = add("""(?:(?:\n)|(?:\r\n))""")
 
     fun br() = lineBreak()
 
@@ -118,6 +113,11 @@ class VerEx {
     fun zeroOrMore() = add("*")
 
     //// HELPERS ////
+
+    private fun add(str: String): VerEx {
+        source.append(str)
+        return this
+    }
 
     private fun sanitize(str: String): String {
         return str.replace("[\\W]".toRegex(), "\\\\$0")
