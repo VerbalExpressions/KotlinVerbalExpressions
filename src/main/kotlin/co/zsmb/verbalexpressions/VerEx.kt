@@ -18,7 +18,7 @@ class VerEx {
 
     }
 
-    private val pattern: Pattern
+    val pattern: Pattern
         get() = Pattern.compile("$prefixes$source$suffixes", modifiers)
 
     private var prefixes = StringBuilder()
