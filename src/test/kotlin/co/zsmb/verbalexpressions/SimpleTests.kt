@@ -335,22 +335,7 @@ class SimpleTests {
     }
 
     @Test
-    fun count1() {
-        val verex = VerEx()
-                .startOfLine()
-                .then("a").times()
-                .endOfLine()
-
-        assertTrue("a" matches verex)
-        assertTrue("aaaa" matches verex)
-        assertTrue("aaaaaaa" matches verex)
-
-        assertFalse("" matches verex)
-        assertFalse("b" matches verex)
-    }
-
-    @Test
-    fun count2() {
+    fun times1() {
         val verex = VerEx()
                 .startOfLine()
                 .then("a").times(3)
@@ -365,7 +350,7 @@ class SimpleTests {
     }
 
     @Test
-    fun count3() {
+    fun times2() {
         val verex = VerEx()
                 .startOfLine()
                 .then("a").times(3, 5)

@@ -82,13 +82,10 @@ class VerEx {
 
     fun multiple(str: String, min: Int? = null, max: Int? = null): VerEx {
         then(str)
-        return times(min, max)
+        return times(min ?: 1, max)
     }
 
-    fun times(min: Int? = null, max: Int? = null): VerEx {
-        if(min == null) {
-            throw IllegalArgumentException("Invalid call to times()")
-        }
+    fun times(min: Int, max: Int? = null): VerEx {
         if (max != null && min > max) {
             throw IllegalArgumentException("Min count ($min) can't be less than max count ($max).")
         }
