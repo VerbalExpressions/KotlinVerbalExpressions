@@ -117,9 +117,9 @@ class VerEx {
 
     fun whiteSpace() = add("""\s""")
 
-    fun oneOrMore(str: String) = add("${sanitize(str)}+")
+    fun oneOrMore() = add("+")
 
-    fun zeroOrMore(str: String) = add("${sanitize(str)}*")
+    fun zeroOrMore() = add("*")
 
     //// HELPERS ////
 
