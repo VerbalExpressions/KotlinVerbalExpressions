@@ -28,7 +28,9 @@ class VerEx {
 
     //// TESTS ////
 
-    fun testExact(toTest: String?) = if (toTest == null) false else pattern.matcher(toTest).find()
+    fun test(toTest: String?) = if (toTest == null) false else pattern.matcher(toTest).find()
+
+    fun testExact(toTest: String?) = if (toTest == null) false else pattern.matcher(toTest).matches()
 
     //// COMPOSITION ////
 
