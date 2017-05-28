@@ -5,7 +5,6 @@ import java.util.regex.Pattern
 class VerEx {
 
     companion object {
-
         private val symbols = mapOf(
                 'd' to Pattern.UNIX_LINES,
                 'i' to Pattern.CASE_INSENSITIVE,
@@ -15,16 +14,17 @@ class VerEx {
                 'u' to Pattern.UNICODE_CASE,
                 'U' to Pattern.UNICODE_CHARACTER_CLASS
         )
-
     }
-
-    val pattern: Pattern
-        get() = Pattern.compile("$prefixes$source$suffixes", modifiers)
 
     private var prefixes = StringBuilder()
     private var source = StringBuilder()
     private var suffixes = StringBuilder()
     private var modifiers = Pattern.MULTILINE
+
+    //// COMPUTED PROPERTIES ////
+
+    val pattern: Pattern
+        get() = Pattern.compile("$prefixes$source$suffixes", modifiers)
 
     //// TESTS ////
 
@@ -114,14 +114,14 @@ class VerEx {
     fun zeroOrMore() = add("*")
 
     fun addModifier(modifier: Char): VerEx {
-        VerEx.Companion.symbols[modifier]?.let {
+        symbols[modifier]?.let {
             modifiers = modifiers or it
         }
         return this
     }
 
     fun removeModifier(modifier: Char): VerEx {
-        VerEx.Companion.symbols[modifier]?.let {
+        symbols[modifier]?.let {
             modifiers = modifiers and it.inv()
         }
         return this
@@ -148,7 +148,7 @@ class VerEx {
         return this
     }
 
-    private fun sanitize(str: String) = str.replace("[\\W]".toRegex(), "\\\\$0")
+    private fun sanitize(str: String) = str.replace("[\\W]".toRegex(), """\\$0""")
 
     private fun updateModifier(modifier: Char, enabled: Boolean) =
             if (enabled) addModifier(modifier)
