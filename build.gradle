@@ -1,8 +1,5 @@
-group 'co.zsmb'
-version '0.1'
-
 buildscript {
-    ext.kotlin_version = '1.1.2-2'
+    ext.kotlin_version = '1.1.3'
 
     repositories {
         mavenCentral()
@@ -12,8 +9,20 @@ buildscript {
     }
 }
 
+plugins {
+    id "com.jfrog.bintray" version "1.7.3"
+}
+
+def GROUP_ID = 'co.zsmb'
+def ARTIFACT_ID = 'kotlinverbalexpressions'
+def VERSION = '0.1'
+
+group GROUP_ID
+version VERSION
+
 apply plugin: 'java'
 apply plugin: 'kotlin'
+apply plugin: 'maven-publish'
 
 apply from: 'testformatter.gradle'
 
@@ -24,6 +33,47 @@ repositories {
 }
 
 dependencies {
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
+    compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
     testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+bintray {
+    user = project.property('bintrayUser')
+    key = project.property('bintrayKey')
+    publications = ['mavenJava']
+
+    pkg {
+        repo = 'KotlinVerbalExpressions'
+        name = 'KotlinVerbalExpressions'
+
+        // vcsUrl = 'https://foo.git'
+        version {
+            name = VERSION
+            released = new Date()
+            //vcsTag = "v${project.version}"
+        }
+    }
+}
+
+task sourcesJar(type: Jar, dependsOn: project.classes) {
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives sourcesJar
+}
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId GROUP_ID
+            artifactId ARTIFACT_ID
+            version VERSION
+
+            from components.java
+
+            artifact sourcesJar {
+                classifier = 'sources'
+            }
+        }
+    }
 }
