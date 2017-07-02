@@ -42,3 +42,30 @@ println(result) // I like trains and trains
 ```
 
 For more usage examples, see the included tests.
+
+### Installation
+
+##### Maven
+
+```
+<dependency>
+  <groupId>co.zsmb</groupId>
+  <artifactId>kotlinverbalexpressions</artifactId>
+  <version>0.1</version>
+</dependency>
+```
+
+##### Gradle
+
+
+```
+repositories {
+    jcenter()
+    // or, alternatively:
+    maven { url 'https://dl.bintray.com/zsmb13/KotlinVerbalExpressions/' }
+}
+
+dependencies {
+    compile 'co.zsmb:kotlinverbalexpressions:0.1'
+}
+```
