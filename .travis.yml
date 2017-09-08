@@ -8,4 +8,6 @@ script:
 - ./gradlew clean build
 
 notifications:
-  email: false
+  email:
+    on_failure: always
+    on_success: never
