@@ -38,7 +38,7 @@ dependencies {
 }
 
 bintray {
-    user = project.hasProperty('bintrayKey') ? project.property('bintrayUser') : System.getenv('bintrayUser')
+    user = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('bintrayUser')
     key = project.hasProperty('bintrayKey') ? project.property('bintrayKey') : System.getenv('bintrayKey')
     publications = ['mavenJava']
 
