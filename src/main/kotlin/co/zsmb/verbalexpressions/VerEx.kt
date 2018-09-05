@@ -2,7 +2,7 @@ package co.zsmb.verbalexpressions
 
 import java.util.regex.Pattern
 
-class VerEx {
+class VerEx(construct: VerEx.() -> Unit = {}) {
 
     companion object {
         private val symbols = mapOf(
@@ -20,6 +20,10 @@ class VerEx {
     private var source = StringBuilder()
     private var suffixes = StringBuilder()
     private var modifiers = Pattern.MULTILINE
+    
+    init {
+        construct()
+    }
 
     //// COMPUTED PROPERTIES ////
 
