@@ -1,15 +1,17 @@
 package co.zsmb.verbalexpressions
 
-import org.junit.Assert.*
-import org.junit.Test
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 class SimpleTests {
 
     @Test
     fun startOfLine() {
         val verex = VerEx()
-                .startOfLine()
-                .then("a")
+            .startOfLine()
+            .then("a")
 
         assertTrue("apple" matches verex)
         assertFalse("banana" matches verex)
@@ -18,8 +20,8 @@ class SimpleTests {
     @Test
     fun endOfLine() {
         val verex = VerEx()
-                .then("a")
-                .endOfLine()
+            .then("a")
+            .endOfLine()
 
         assertFalse("apple" matches verex)
         assertTrue("banana" matches verex)
@@ -28,7 +30,7 @@ class SimpleTests {
     @Test
     fun find1() {
         val verex = VerEx()
-                .find("b")
+            .find("b")
 
         assertTrue("abc" matches verex)
     }
@@ -36,7 +38,7 @@ class SimpleTests {
     @Test
     fun find2() {
         val verex = VerEx()
-                .find("world")
+            .find("world")
 
         assertTrue("Hello world" matches verex)
     }
@@ -44,7 +46,7 @@ class SimpleTests {
     @Test
     fun then1() {
         val verex = VerEx()
-                .then("b")
+            .then("b")
 
         assertTrue("abc" matches verex)
     }
@@ -52,7 +54,7 @@ class SimpleTests {
     @Test
     fun then2() {
         val verex = VerEx()
-                .then("llo wor")
+            .then("llo wor")
 
         assertTrue("Hello world" matches verex)
     }
@@ -60,8 +62,8 @@ class SimpleTests {
     @Test
     fun maybe() {
         val verex = VerEx()
-                .then("apple")
-                .maybe(" tree")
+            .then("apple")
+            .maybe(" tree")
 
         assertTrue("apple tree" matches verex)
         assertTrue("apple" matches verex)
@@ -70,7 +72,7 @@ class SimpleTests {
     @Test
     fun anything1() {
         val verex = VerEx()
-                .anything()
+            .anything()
 
         assertTrue("" matches verex)
         assertTrue("qwerty" matches verex)
@@ -80,9 +82,9 @@ class SimpleTests {
     @Test
     fun anything2() {
         val verex = VerEx()
-                .then("a")
-                .anything()
-                .then("a")
+            .then("a")
+            .anything()
+            .then("a")
 
         assertTrue("aa" matches verex)
         assertTrue("aqwertya" matches verex)
@@ -92,7 +94,7 @@ class SimpleTests {
     @Test
     fun anythingBut1() {
         val verex = VerEx()
-                .anythingBut("abcd")
+            .anythingBut("abcd")
 
         assertTrue("" matches verex)
         assertTrue("eleven" matches verex)
@@ -102,9 +104,9 @@ class SimpleTests {
     @Test
     fun anythingBut2() {
         val verex = VerEx()
-                .startOfLine()
-                .anythingBut("abcd")
-                .endOfLine()
+            .startOfLine()
+            .anythingBut("abcd")
+            .endOfLine()
 
         assertFalse("apple" matches verex)
         assertFalse("banana" matches verex)
@@ -113,7 +115,7 @@ class SimpleTests {
     @Test
     fun something1() {
         val verex = VerEx()
-                .something()
+            .something()
 
         assertTrue("qwerty" matches verex)
         assertTrue("123456789" matches verex)
@@ -124,9 +126,9 @@ class SimpleTests {
     @Test
     fun something2() {
         val verex = VerEx()
-                .then("a")
-                .something()
-                .then("a")
+            .then("a")
+            .something()
+            .then("a")
 
         assertTrue("aqwertya" matches verex)
         assertTrue("a123456789a" matches verex)
@@ -137,7 +139,7 @@ class SimpleTests {
     @Test
     fun somethingBut1() {
         val verex = VerEx()
-                .somethingBut("abcd")
+            .somethingBut("abcd")
 
         assertTrue("eleven" matches verex)
         assertTrue("123456" matches verex)
@@ -148,9 +150,9 @@ class SimpleTests {
     @Test
     fun somethingBut2() {
         val verex = VerEx()
-                .startOfLine()
-                .somethingBut("abcd")
-                .endOfLine()
+            .startOfLine()
+            .somethingBut("abcd")
+            .endOfLine()
 
         assertFalse("apple" matches verex)
         assertFalse("banana" matches verex)
@@ -159,9 +161,9 @@ class SimpleTests {
     @Test
     fun lineBreak() {
         val verex = VerEx()
-                .then("a")
-                .lineBreak()
-                .then("b")
+            .then("a")
+            .lineBreak()
+            .then("b")
 
         assertTrue("a\nb" matches verex)
     }
@@ -169,9 +171,9 @@ class SimpleTests {
     @Test
     fun br() {
         val verex = VerEx()
-                .then("a")
-                .br()
-                .then("b")
+            .then("a")
+            .br()
+            .then("b")
 
         assertTrue("a\nb" matches verex)
     }
@@ -179,9 +181,9 @@ class SimpleTests {
     @Test
     fun tab() {
         val verex = VerEx()
-                .then("a")
-                .tab()
-                .then("b")
+            .then("a")
+            .tab()
+            .then("b")
 
         assertTrue("a\tb" matches verex)
     }
@@ -189,8 +191,8 @@ class SimpleTests {
     @Test
     fun word() {
         val verex = VerEx()
-                .then("Hello ")
-                .word()
+            .then("Hello ")
+            .word()
 
         assertTrue("Hello world" matches verex)
         assertTrue("Hello Jane" matches verex)
@@ -205,7 +207,7 @@ class SimpleTests {
     @Test
     fun anyOf() {
         val verex = VerEx()
-                .anyOf("abcd")
+            .anyOf("abcd")
 
         assertTrue("a" matches verex)
         assertTrue("d" matches verex)
@@ -217,7 +219,7 @@ class SimpleTests {
     @Test
     fun any() {
         val verex = VerEx()
-                .any("abcd")
+            .any("abcd")
 
         assertTrue("a" matches verex)
         assertTrue("d" matches verex)
@@ -229,8 +231,8 @@ class SimpleTests {
     @Test
     fun withAnyCase1() {
         val verex = VerEx()
-                .then("apple")
-                .withAnyCase()
+            .then("apple")
+            .withAnyCase()
 
         assertTrue("apple" matches verex)
         assertTrue("Apple" matches verex)
@@ -240,8 +242,8 @@ class SimpleTests {
     @Test
     fun withAnyCase2() {
         val verex = VerEx()
-                .then("apple")
-                .withAnyCase(false)
+            .then("apple")
+            .withAnyCase(false)
 
         assertTrue("apple" matches verex)
 
@@ -252,12 +254,12 @@ class SimpleTests {
     @Test
     fun searchOneLine1() {
         val verex = VerEx()
-                .startOfLine()
-                .anything()
-                .then("b")
-                .anything()
-                .endOfLine()
-                .searchOneLine()
+            .startOfLine()
+            .anything()
+            .then("b")
+            .anything()
+            .endOfLine()
+            .searchOneLine()
 
         assertFalse("a\nb" matches verex)
     }
@@ -265,12 +267,12 @@ class SimpleTests {
     @Test
     fun searchOneLine2() {
         val verex = VerEx()
-                .startOfLine()
-                .anything()
-                .then("b")
-                .anything()
-                .endOfLine()
-                .searchOneLine(false)
+            .startOfLine()
+            .anything()
+            .then("b")
+            .anything()
+            .endOfLine()
+            .searchOneLine(false)
 
         assertTrue("a\nb" matches verex)
     }
@@ -278,10 +280,10 @@ class SimpleTests {
     @Test
     fun or() {
         val verex = VerEx()
-                .startOfLine()
-                .then("a")
-                .or("b")
-                .then("c")
+            .startOfLine()
+            .then("a")
+            .or("b")
+            .then("c")
 
         assertTrue("ac" matches verex)
         assertTrue("bc" matches verex)
@@ -290,9 +292,9 @@ class SimpleTests {
     @Test
     fun multiple1() {
         val verex = VerEx()
-                .startOfLine()
-                .multiple("a")
-                .endOfLine()
+            .startOfLine()
+            .multiple("a")
+            .endOfLine()
 
         assertTrue("a" matches verex)
         assertTrue("aaaa" matches verex)
@@ -305,9 +307,9 @@ class SimpleTests {
     @Test
     fun multiple2() {
         val verex = VerEx()
-                .startOfLine()
-                .multiple("a", 3)
-                .endOfLine()
+            .startOfLine()
+            .multiple("a", 3)
+            .endOfLine()
 
         assertTrue("aaa" matches verex)
         assertTrue("aaaaa" matches verex)
@@ -320,9 +322,9 @@ class SimpleTests {
     @Test
     fun multiple3() {
         val verex = VerEx()
-                .startOfLine()
-                .multiple("a", 3, 5)
-                .endOfLine()
+            .startOfLine()
+            .multiple("a", 3, 5)
+            .endOfLine()
 
         assertTrue("aaa" matches verex)
         assertTrue("aaaa" matches verex)
@@ -337,9 +339,9 @@ class SimpleTests {
     @Test
     fun times1() {
         val verex = VerEx()
-                .startOfLine()
-                .then("a").times(3)
-                .endOfLine()
+            .startOfLine()
+            .then("a").times(3)
+            .endOfLine()
 
         assertTrue("aaa" matches verex)
         assertTrue("aaaaa" matches verex)
@@ -352,9 +354,9 @@ class SimpleTests {
     @Test
     fun times2() {
         val verex = VerEx()
-                .startOfLine()
-                .then("a").times(3, 5)
-                .endOfLine()
+            .startOfLine()
+            .then("a").times(3, 5)
+            .endOfLine()
 
         assertTrue("aaa" matches verex)
         assertTrue("aaaa" matches verex)
@@ -369,8 +371,8 @@ class SimpleTests {
     @Test
     fun atLeast() {
         val verex = VerEx()
-                .then("a")
-                .atLeast(3)
+            .then("a")
+            .atLeast(3)
 
         assertTrue("aaa" matches verex)
         assertTrue("aaaaa" matches verex)
@@ -382,7 +384,7 @@ class SimpleTests {
     @Test
     fun replace() {
         val verex = VerEx()
-                .then("a").oneOrMore()
+            .then("a").oneOrMore()
 
         assertEquals("hello", verex.replace("haaaaallo", "e"))
     }
@@ -390,7 +392,7 @@ class SimpleTests {
     @Test
     fun range1() {
         val verex = VerEx()
-                .range(1 to 5)
+            .range(1 to 5)
 
         assertTrue("1" matches verex)
         assertTrue("3" matches verex)
@@ -404,9 +406,9 @@ class SimpleTests {
     @Test
     fun range2() {
         val verex = VerEx()
-                .startOfLine()
-                .range(1 to 5, "a" to "d").oneOrMore()
-                .endOfLine()
+            .startOfLine()
+            .range(1 to 5, "a" to "d").oneOrMore()
+            .endOfLine()
 
         assertTrue("12345" matches verex)
         assertTrue("abcd" matches verex)
@@ -419,9 +421,9 @@ class SimpleTests {
     @Test
     fun beginCapture_endCapture() {
         val verex = VerEx()
-                .beginCapture()
-                .then("aaa")
-                .endCapture()
+            .beginCapture()
+            .then("aaa")
+            .endCapture()
         val matcher = verex.pattern.matcher("baaab")
         matcher.find()
 
@@ -431,9 +433,9 @@ class SimpleTests {
     @Test
     fun whiteSpace() {
         val verex = VerEx()
-                .startOfLine()
-                .whiteSpace()
-                .endOfLine()
+            .startOfLine()
+            .whiteSpace()
+            .endOfLine()
 
         assertTrue(" " matches verex)
         assertTrue("\t" matches verex)
@@ -448,10 +450,10 @@ class SimpleTests {
     @Test
     fun oneOrMore() {
         val verex = VerEx()
-                .then("a")
-                .then("b")
-                .oneOrMore()
-                .then("a")
+            .then("a")
+            .then("b")
+            .oneOrMore()
+            .then("a")
 
         assertTrue("aba" matches verex)
         assertTrue("abba" matches verex)
@@ -462,10 +464,10 @@ class SimpleTests {
     @Test
     fun zeroOrMore() {
         val verex = VerEx()
-                .then("a")
-                .then("b")
-                .zeroOrMore()
-                .then("a")
+            .then("a")
+            .then("b")
+            .zeroOrMore()
+            .then("a")
 
         assertTrue("aa" matches verex)
         assertTrue("aba" matches verex)
@@ -475,10 +477,10 @@ class SimpleTests {
     @Test
     fun addModifier() {
         val verex = VerEx()
-                .then("apple")
-                .addModifier("i")
-                .removeModifier("i")
-                .addModifier("i")
+            .then("apple")
+            .addModifier("i")
+            .removeModifier("i")
+            .addModifier("i")
 
         assertTrue("apple" matches verex)
         assertTrue("Apple" matches verex)
@@ -488,10 +490,10 @@ class SimpleTests {
     @Test
     fun removeModifier() {
         val verex = VerEx()
-                .then("apple")
-                .removeModifier('i')
-                .addModifier('i')
-                .removeModifier('i')
+            .then("apple")
+            .removeModifier('i')
+            .addModifier('i')
+            .removeModifier('i')
 
         assertTrue("apple" matches verex)
 

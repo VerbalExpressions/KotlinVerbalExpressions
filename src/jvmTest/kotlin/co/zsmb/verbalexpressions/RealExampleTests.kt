@@ -1,8 +1,8 @@
 package co.zsmb.verbalexpressions
 
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
-import org.junit.Test
+import kotlin.test.Test
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 class RealExampleTests {
 
@@ -18,7 +18,7 @@ class RealExampleTests {
                 .endOfLine()
 
         assertTrue("https://www.google.com" matches verex)
-        assertTrue("http://zsmb.co" matches verex)
+        assertTrue("http://www.localhost/" matches verex)
         assertTrue("https://www.wikipedia.org/" matches verex)
     }
 
@@ -43,7 +43,21 @@ class RealExampleTests {
 
     @Test
     fun phoneNumbers() {
-        val verex = VerEx()
+
+        fun VerEx.shouldMatch() {
+            assertTrue("12345678" matches this)
+            assertTrue("123-4567" matches this)
+            assertTrue("1-800-1234-567" matches this)
+            assertTrue("123-456" matches this)
+
+            assertFalse("phone number" matches this)
+            assertFalse("123456" matches this)
+            assertFalse("123456789012345" matches this)
+            assertFalse("123-5-789-12345" matches this)
+
+        }
+
+        val verex1 = VerEx()
                 .startOfLine()
                 .beginCapture()
                 .range(0 to 9)
@@ -52,15 +66,19 @@ class RealExampleTests {
                 .times(7, 14)
                 .endOfLine()
 
-        assertTrue("12345678" matches verex)
-        assertTrue("123-4567" matches verex)
-        assertTrue("1-800-1234-567" matches verex)
-        assertTrue("123-456" matches verex)
+        verex1.shouldMatch()
 
-        assertFalse("phone number" matches verex)
-        assertFalse("123456" matches verex)
-        assertFalse("123456789012345" matches verex)
-        assertFalse("123-5-789-12345" matches verex)
+        val verex2 = VerEx {
+            startOfLine()
+            capture {
+                range(0 to 9)
+                or("-")
+            }
+            times(7, 14)
+            endOfLine()
+        }
+
+        verex2.shouldMatch()
     }
 
     @Test

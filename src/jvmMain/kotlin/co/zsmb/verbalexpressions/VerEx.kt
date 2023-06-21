@@ -4,25 +4,13 @@ import java.util.regex.Pattern
 
 class VerEx(construct: VerEx.() -> Unit = {}) {
 
-    companion object {
-        private val symbols = mapOf(
-                'd' to Pattern.UNIX_LINES,
-                'i' to Pattern.CASE_INSENSITIVE,
-                'x' to Pattern.COMMENTS,
-                'm' to Pattern.MULTILINE,
-                's' to Pattern.DOTALL,
-                'u' to Pattern.UNICODE_CASE,
-                'U' to Pattern.UNICODE_CHARACTER_CLASS
-        )
-    }
-
     private var prefixes = StringBuilder()
     private var source = StringBuilder()
     private var suffixes = StringBuilder()
     private var modifiers = Pattern.MULTILINE
-    
+
     init {
-        construct()
+        this.construct()
     }
 
     //// COMPUTED PROPERTIES ////
@@ -32,9 +20,19 @@ class VerEx(construct: VerEx.() -> Unit = {}) {
 
     //// TESTS ////
 
-    fun test(toTest: String?) = if (toTest == null) false else pattern.matcher(toTest).find()
+    fun test(toTest: String?): Boolean =
+            if (toTest == null) {
+                false
+            } else {
+                pattern.matcher(toTest).find()
+            }
 
-    fun testExact(toTest: String?) = if (toTest == null) false else pattern.matcher(toTest).matches()
+    fun testExact(toTest: String?): Boolean =
+            if (toTest == null) {
+                false
+            } else {
+                pattern.matcher(toTest).matches()
+            }
 
     //// COMPOSITION ////
 
@@ -92,8 +90,8 @@ class VerEx(construct: VerEx.() -> Unit = {}) {
     }
 
     fun times(min: Int, max: Int? = null): VerEx {
-        if (max != null && min > max) {
-            throw IllegalArgumentException("Min count ($min) can't be less than max count ($max).")
+        if (max != null) {
+            require(min <= max) { "Min count ($min) can't be less than max count ($max)." }
         }
         return add("{$min,${max ?: ""}}")
     }
@@ -102,7 +100,8 @@ class VerEx(construct: VerEx.() -> Unit = {}) {
 
     fun atLeast(min: Int) = times(min)
 
-    fun replace(source: String, replacement: String): String = pattern.matcher(source).replaceAll(replacement)
+    fun replace(source: String, replacement: String): String =
+            pattern.matcher(source).replaceAll(replacement)
 
     fun range(vararg args: Pair<Any, Any>) =
             add(args.joinToString(prefix = "[", postfix = "]", separator = "") { "${it.first}-${it.second}" })
@@ -110,6 +109,16 @@ class VerEx(construct: VerEx.() -> Unit = {}) {
     fun beginCapture() = add("(")
 
     fun endCapture() = add(")")
+
+    /**
+     * Starts a capture block ([beginCapture]), executes [block],
+     * and then ends the capture ([endCapture]).
+     */
+    fun capture(block: VerEx.() -> Unit) {
+        beginCapture()
+        this.block()
+        endCapture()
+    }
 
     fun whiteSpace() = add("""\s""")
 
@@ -132,17 +141,17 @@ class VerEx(construct: VerEx.() -> Unit = {}) {
     }
 
     fun addModifier(modifier: String): VerEx {
-        if (modifier.length != 1) {
-            throw IllegalArgumentException("Modifier has to be a single character")
+        val char = requireNotNull(modifier.singleOrNull()) {
+            "Modifier has to be a single character"
         }
-        return addModifier(modifier[0])
+        return addModifier(char)
     }
 
     fun removeModifier(modifier: String): VerEx {
-        if (modifier.length != 1) {
-            throw IllegalArgumentException("Modifier has to be a single character")
+        val char = requireNotNull(modifier.singleOrNull()) {
+            "Modifier has to be a single character"
         }
-        return removeModifier(modifier[0])
+        return removeModifier(char)
     }
 
     //// PRIVATE HELPERS ////
@@ -152,10 +161,26 @@ class VerEx(construct: VerEx.() -> Unit = {}) {
         return this
     }
 
-    private fun sanitize(str: String) = str.replace("[\\W]".toRegex(), """\\$0""")
-
     private fun updateModifier(modifier: Char, enabled: Boolean) =
-            if (enabled) addModifier(modifier)
-            else removeModifier(modifier)
+            if (enabled) {
+                addModifier(modifier)
+            } else {
+                removeModifier(modifier)
+            }
 
+
+    companion object {
+        private val symbols = mapOf(
+                'd' to Pattern.UNIX_LINES,
+                'i' to Pattern.CASE_INSENSITIVE,
+                'x' to Pattern.COMMENTS,
+                'm' to Pattern.MULTILINE,
+                's' to Pattern.DOTALL,
+                'u' to Pattern.UNICODE_CASE,
+                'U' to Pattern.UNICODE_CHARACTER_CLASS
+        )
+
+        private fun sanitize(str: String): String =
+                str.replace("\\W".toRegex(), """\\$0""")
+    }
 }

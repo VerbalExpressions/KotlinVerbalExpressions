@@ -1,16 +1,16 @@
 package co.zsmb.verbalexpressions
 
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
-import org.junit.Test
+import kotlin.test.Test
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 class MatcherTests {
 
     @Test
     fun matches() {
         val verex = VerEx()
-                .startOfLine()
-                .then("a")
+            .startOfLine()
+            .then("a")
 
         assertTrue("apple" matches verex)
         assertTrue("art" matches verex)
@@ -21,8 +21,8 @@ class MatcherTests {
     @Test
     fun matchesExact() {
         val verex = VerEx()
-                .startOfLine()
-                .then("a")
+            .startOfLine()
+            .then("a")
 
         assertTrue("a" matchesExact verex)
 
@@ -34,8 +34,8 @@ class MatcherTests {
     @Test
     fun test() {
         val verex = VerEx()
-                .startOfLine()
-                .then("a")
+            .startOfLine()
+            .then("a")
 
         assertTrue(verex.test("apple"))
         assertTrue(verex.test("art"))
@@ -46,8 +46,8 @@ class MatcherTests {
     @Test
     fun testExact() {
         val verex = VerEx()
-                .startOfLine()
-                .then("a")
+            .startOfLine()
+            .then("a")
 
         assertTrue(verex.testExact("a"))
 
